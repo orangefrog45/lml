@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef LML_H
+#define LML_H
+
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
@@ -402,37 +405,37 @@ namespace lml {
         LML_QUALIFIER Vec operator~() const { static_assert(is_integral_v<T>, "Bitwise operators only support integral types"); Vec res; for (int i = 0; i < N; ++i) res.data[i] = ~data[i]; return res; }
     };
 
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator+(Vec<T, N> a, const Vec<T, N>& b) { return a + b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator-(Vec<T, N> a, const Vec<T, N>& b) { return a - b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator*(Vec<T, N> a, const Vec<T, N>& b) { return a * b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator/(Vec<T, N> a, const Vec<T, N>& b) { return a / b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator+(Vec<T, N> a, const Vec<T, N>& b) { return a += b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator-(Vec<T, N> a, const Vec<T, N>& b) { return a -= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator*(Vec<T, N> a, const Vec<T, N>& b) { return a *= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator/(Vec<T, N> a, const Vec<T, N>& b) { return a /= b; }
 
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator+(Vec<T, N> a, T b) { return a + b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator-(Vec<T, N> a, T b) { return a - b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator*(Vec<T, N> a, T b) { return a * b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator/(Vec<T, N> a, T b) { return a / b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator+(Vec<T, N> a, T b) { return a += b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator-(Vec<T, N> a, T b) { return a -= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator*(Vec<T, N> a, T b) { return a *= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator/(Vec<T, N> a, T b) { return a /= b; }
 
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator+(T a, Vec<T, N> b) { return b + a; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator+(T a, Vec<T, N> b) { return b += a; }
     template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator-(T a, const Vec<T, N>& b) { Vec<T, N> res; for (int i = 0; i < N; ++i) res[i] = a - b[i]; return res; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator*(T a, Vec<T, N> b) { return b * a; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator*(T a, Vec<T, N> b) { return b *= a; }
     template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator/(T a, const Vec<T, N>& b) { Vec<T, N> res; for (int i = 0; i < N; ++i) res[i] = a / b[i]; return res; }
 
     // Bitwise binary operators
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator&(Vec<T, N> a, const Vec<T, N>& b) { return a & b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator|(Vec<T, N> a, const Vec<T, N>& b) { return a | b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator^(Vec<T, N> a, const Vec<T, N>& b) { return a ^ b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator<<(Vec<T, N> a, const Vec<T, N>& b) { return a << b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator>>(Vec<T, N> a, const Vec<T, N>& b) { return a >> b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator&(Vec<T, N> a, const Vec<T, N>& b) { return a &= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator|(Vec<T, N> a, const Vec<T, N>& b) { return a |= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator^(Vec<T, N> a, const Vec<T, N>& b) { return a ^= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator<<(Vec<T, N> a, const Vec<T, N>& b) { return a <<= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator>>(Vec<T, N> a, const Vec<T, N>& b) { return a >>= b; }
 
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator&(Vec<T, N> a, T b) { return a & b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator|(Vec<T, N> a, T b) { return a | b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator^(Vec<T, N> a, T b) { return a ^ b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator<<(Vec<T, N> a, T b) { return a << b; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator>>(Vec<T, N> a, T b) { return a >> b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator&(Vec<T, N> a, T b) { return a &= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator|(Vec<T, N> a, T b) { return a |= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator^(Vec<T, N> a, T b) { return a ^= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator<<(Vec<T, N> a, T b) { return a <<= b; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator>>(Vec<T, N> a, T b) { return a >>= b; }
 
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator&(T a, Vec<T, N> b) { return b & a; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator|(T a, Vec<T, N> b) { return b | a; }
-    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator^(T a, Vec<T, N> b) { return b ^ a; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator&(T a, Vec<T, N> b) { return b &= a; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator|(T a, Vec<T, N> b) { return b |= a; }
+    template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator^(T a, Vec<T, N> b) { return b ^= a; }
     template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator<<(T a, const Vec<T, N>& b) { Vec<T, N> res; if constexpr (is_same_v<T, int>) { for (int i = 0; i < N; ++i) res[i] = a << b[i]; } return res; }
     template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator>>(T a, const Vec<T, N>& b) { Vec<T, N> res; if constexpr (is_same_v<T, int>) { for (int i = 0; i < N; ++i) res[i] = a >> b[i]; } return res; }
 
@@ -812,6 +815,19 @@ namespace lml {
 
         LML_QUALIFIER Quat() : x(0), y(0), z(0), w(1) {}
         LML_QUALIFIER Quat(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
+        LML_QUALIFIER Quat(Vec<T, 3> euler) {
+            T cx = cos(euler.x * static_cast<T>(0.5));
+            T sx = sin(euler.x * static_cast<T>(0.5));
+            T cy = cos(euler.y * static_cast<T>(0.5));
+            T sy = sin(euler.y * static_cast<T>(0.5));
+            T cz = cos(euler.z * static_cast<T>(0.5));
+            T sz = sin(euler.z * static_cast<T>(0.5));
+
+            x = sx * cy * cz - cx * sy * sz;
+            y = cx * sy * cz + sx * cy * sz;
+            z = cx * cy * sz - sx * sy * cz;
+            w = cx * cy * cz + sx * sy * sz;
+        }
         LML_QUALIFIER Quat(T angle, Vec<T, 3> axis) {
             T s = sin(angle * static_cast<T>(0.5));
             x = axis.x * s;
@@ -863,6 +879,24 @@ namespace lml {
     template<typename T>
     LML_QUALIFIER LML_INLINE Quat<T> angleAxis(T angle, const Vec<T, 3>& axis) {
         return Quat<T>(angle, axis);
+    }
+
+    template<typename T>
+    LML_QUALIFIER LML_INLINE Vec<T, 3> rotate(const Quat<T>& q, const Vec<T, 3>& v) {
+        return q * v;
+    }
+
+    template<typename T>
+    LML_QUALIFIER LML_INLINE Mat<T, 3> lookAt(Vec<T, 3> eye, Vec<T, 3> center, Vec<T, 3> up) {
+        Vec<T, 3> f = normalize(center - eye);
+        Vec<T, 3> s = normalize(cross(f, up));
+        Vec<T, 3> u = cross(s, f);
+
+        return Mat<T, 3>(
+             s.x,  s.y,  s.z,
+             u.x,  u.y,  u.z,
+            -f.x, -f.y, -f.z
+        );
     }
 
     template<typename T, int N> LML_QUALIFIER LML_INLINE Vec<T, N> operator*(const Mat<T, N>& m, const Vec<T, N>& v) { return multiply(m, v); }
@@ -1321,4 +1355,6 @@ namespace lml {
 #pragma clang diagnostic pop
 #elif defined(_MSC_VER)
 #pragma warning(pop)
+#endif
+
 #endif
