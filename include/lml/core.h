@@ -716,6 +716,61 @@ namespace lml {
     struct Mat {
         Vec<T, N> columns[N];
 
+        LML_QUALIFIER Mat() {
+            for (int i = 0; i < N; ++i) {
+                for (int j = 0; j < N; ++j) {
+                    columns[i][j] = static_cast<T>(0);
+                }
+            }
+        }
+
+        LML_QUALIFIER explicit Mat(T scalar) {
+            for (int i = 0; i < N; ++i) {
+                for (int j = 0; j < N; ++j) {
+                    columns[i][j] = (i == j) ? scalar : static_cast<T>(0);
+                }
+            }
+        }
+
+        LML_QUALIFIER Mat(Vec<T, N> c0, Vec<T, N> c1) {
+            columns[0] = c0;
+            columns[1] = c1;
+        }
+
+        LML_QUALIFIER Mat(Vec<T, N> c0, Vec<T, N> c1, Vec<T, N> c2) {
+            columns[0] = c0;
+            columns[1] = c1;
+            columns[2] = c2;
+        }
+
+        LML_QUALIFIER Mat(Vec<T, N> c0, Vec<T, N> c1, Vec<T, N> c2, Vec<T, N> c3) {
+            columns[0] = c0;
+            columns[1] = c1;
+            columns[2] = c2;
+            columns[3] = c3;
+        }
+
+        LML_QUALIFIER Mat(T m00, T m01, T m10, T m11) {
+            static_assert(N == 2, "Matrix dimension must be 2");
+            columns[0][0] = m00; columns[0][1] = m01;
+            columns[1][0] = m10; columns[1][1] = m11;
+        }
+
+        LML_QUALIFIER Mat(T m00, T m01, T m02, T m10, T m11, T m12, T m20, T m21, T m22) {
+            static_assert(N == 3, "Matrix dimension must be 3");
+            columns[0][0] = m00; columns[0][1] = m01; columns[0][2] = m02;
+            columns[1][0] = m10; columns[1][1] = m11; columns[1][2] = m12;
+            columns[2][0] = m20; columns[2][1] = m21; columns[2][2] = m22;
+        }
+
+        LML_QUALIFIER Mat(T m00, T m01, T m02, T m03, T m10, T m11, T m12, T m13, T m20, T m21, T m22, T m23, T m30, T m31, T m32, T m33) {
+            static_assert(N == 4, "Matrix dimension must be 4");
+            columns[0][0] = m00; columns[0][1] = m01; columns[0][2] = m02; columns[0][3] = m03;
+            columns[1][0] = m10; columns[1][1] = m11; columns[1][2] = m12; columns[1][3] = m13;
+            columns[2][0] = m20; columns[2][1] = m21; columns[2][2] = m22; columns[2][3] = m23;
+            columns[3][0] = m30; columns[3][1] = m31; columns[3][2] = m32; columns[3][3] = m33;
+        }
+
         LML_QUALIFIER Vec<T, N>& operator[](int i) { return columns[i]; }
         LML_QUALIFIER const Vec<T, N>& operator[](int i) const { return columns[i]; }
 
