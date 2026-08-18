@@ -912,10 +912,11 @@ namespace lml {
             w = cx * cy * cz + sx * sy * sz;
         }
         LML_QUALIFIER Quat(T angle, Vec<T, 3> axis) {
+            Vec<T, 3> a = normalize(axis);
             T s = sin(angle * static_cast<T>(0.5));
-            x = axis.x * s;
-            y = axis.y * s;
-            z = axis.z * s;
+            x = a.x * s;
+            y = a.y * s;
+            z = a.z * s;
             w = cos(angle * static_cast<T>(0.5));
         }
 
@@ -971,7 +972,7 @@ namespace lml {
 
     template<typename T>
     LML_QUALIFIER LML_INLINE Mat<T, 3> mat3_cast(const Quat<T>& q) {
-        Mat<T, 3> Result(static_cast<T>(0));
+        Mat<T, 3> Result(static_cast<T>(1));
         T qxx(q.x * q.x);
         T qyy(q.y * q.y);
         T qzz(q.z * q.z);
@@ -999,11 +1000,10 @@ namespace lml {
     template<typename T>
     LML_QUALIFIER LML_INLINE Mat<T, 4> mat4_cast(const Quat<T>& q) {
         Mat<T, 3> m3 = mat3_cast(q);
-        Mat<T, 4> Result(static_cast<T>(0));
+        Mat<T, 4> Result(static_cast<T>(1));
         Result[0] = Vec<T, 4>(m3[0], 0);
         Result[1] = Vec<T, 4>(m3[1], 0);
         Result[2] = Vec<T, 4>(m3[2], 0);
-        Result[3] = Vec<T, 4>(0, 0, 0, 1);
         return Result;
     }
 
@@ -1034,13 +1034,13 @@ namespace lml {
 
         switch (biggestIndex) {
         case 0:
-            return Quat<T>(biggestVal, (m[1][2] - m[2][1]) * mult, (m[2][0] - m[0][2]) * mult, (m[0][1] - m[1][0]) * mult);
+            return Quat<T>((m[1][2] - m[2][1]) * mult, (m[2][0] - m[0][2]) * mult, (m[0][1] - m[1][0]) * mult, biggestVal);
         case 1:
-            return Quat<T>((m[1][2] - m[2][1]) * mult, biggestVal, (m[0][1] + m[1][0]) * mult, (m[2][0] + m[0][2]) * mult);
+            return Quat<T>(biggestVal, (m[0][1] + m[1][0]) * mult, (m[2][0] + m[0][2]) * mult, (m[1][2] - m[2][1]) * mult);
         case 2:
-            return Quat<T>((m[2][0] - m[0][2]) * mult, (m[0][1] + m[1][0]) * mult, biggestVal, (m[1][2] + m[2][1]) * mult);
+            return Quat<T>((m[0][1] + m[1][0]) * mult, biggestVal, (m[1][2] + m[2][1]) * mult, (m[2][0] - m[0][2]) * mult);
         case 3:
-            return Quat<T>((m[0][1] - m[1][0]) * mult, (m[2][0] + m[0][2]) * mult, (m[1][2] + m[2][1]) * mult, biggestVal);
+            return Quat<T>((m[2][0] + m[0][2]) * mult, (m[1][2] + m[2][1]) * mult, biggestVal, (m[0][1] - m[1][0]) * mult);
         default:
             return Quat<T>(0, 0, 0, 1);
         }
@@ -1089,13 +1089,13 @@ namespace lml {
 
         Mat<T, 4> Result(static_cast<T>(1));
         Result[0][0] = s.x;
-        Result[1][0] = s.y;
-        Result[2][0] = s.z;
         Result[0][1] = u.x;
-        Result[1][1] = u.y;
-        Result[2][1] = u.z;
         Result[0][2] =-f.x;
+        Result[1][0] = s.y;
+        Result[1][1] = u.y;
         Result[1][2] =-f.y;
+        Result[2][0] = s.z;
+        Result[2][1] = u.z;
         Result[2][2] =-f.z;
         Result[3][0] =-dot(s, eye);
         Result[3][1] =-dot(u, eye);
@@ -1109,9 +1109,6 @@ namespace lml {
         Result[0][0] = static_cast<T>(2) / (right - left);
         Result[1][1] = static_cast<T>(2) / (top - bottom);
         Result[2][2] = -static_cast<T>(2) / (zFar - zNear);
-        Result[0][3] = static_cast<T>(0); // Should be 0 already from identity(1)
-        Result[1][3] = static_cast<T>(0);
-        Result[2][3] = static_cast<T>(0);
         Result[3][0] = -(right + left) / (right - left);
         Result[3][1] = -(top + bottom) / (top - bottom);
         Result[3][2] = -(zFar + zNear) / (zFar - zNear);
