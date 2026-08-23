@@ -720,6 +720,20 @@ namespace lml {
     }
 
     template<typename T, int N>
+    LML_QUALIFIER LML_INLINE T largestComp(Vec<T, N> v) {
+        T res = v[0];
+        for (int i = 1; i < N; ++i) res = max(res, v[i]);
+        return res;
+    }
+
+    template<typename T, int N>
+    LML_QUALIFIER LML_INLINE T smallestComp(Vec<T, N> v) {
+        T res = v[0];
+        for (int i = 1; i < N; ++i) res = min(res, v[i]);
+        return res;
+    }
+
+    template<typename T, int N>
     LML_QUALIFIER LML_INLINE Vec<T, N> clamp(Vec<T, N> x, Vec<T, N> min_val, Vec<T, N> max_val) {
         Vec<T, N> res;
         for (int i = 0; i < N; ++i) res[i] = clamp(x[i], min_val[i], max_val[i]);
@@ -888,6 +902,15 @@ namespace lml {
                 result[i] += m[j][i] * v[j];
             }
         }
+        return result;
+    }
+
+    template<typename T>
+    LML_QUALIFIER LML_INLINE Mat<T, 3> scale(Vec<T, 3> v) {
+        Mat<T, 3> result(static_cast<T>(0));
+        result[0][0] = v.x;
+        result[1][1] = v.y;
+        result[2][2] = v.z;
         return result;
     }
 
