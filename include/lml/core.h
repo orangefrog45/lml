@@ -372,13 +372,6 @@ namespace lml {
 
     template<typename T, int N>
     struct Vec : public VecBase<T, N> {
-        static_assert(is_same_v<T, float>
-            || is_same_v<T, double>
-            || is_same_v<T, int32_t>
-            || is_same_v<T, uint32_t>
-            || is_same_v<T, bool>,
-            "Vec only supports float, double, int, uint32_t, and bool");
-
         using value_type = T;
         using VecBase<T, N>::data;
         static constexpr int dim = N;
@@ -774,8 +767,18 @@ namespace lml {
     }
 
     template<typename T, int N>
+    LML_QUALIFIER LML_INLINE T adot(Vec<T, N> a, Vec<T, N> b) {
+        return abs(dot(a, b));
+    }
+
+    template<typename T, int N>
     LML_QUALIFIER LML_INLINE T length(Vec<T, N> v) {
         return sqrt(dot(v, v));
+    }
+
+    template<typename T, int N>
+    LML_QUALIFIER LML_INLINE T length2(Vec<T, N> v) {
+        return dot(v, v);
     }
 
     template<typename T, int N>
