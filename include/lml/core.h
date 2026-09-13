@@ -3,13 +3,15 @@
 #ifndef LML_H
 #define LML_H
 
-#ifdef __clang__
+#if defined(__clang__)
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
+#pragma clang diagnostic ignored "-Weverything"
+#elif defined(__GNUC__) || defined(__GNUG__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
 #elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable: 4505) // 4505: unreferenced function with internal linkage
-#pragma warning(disable: 4068) // 4068: unknown pragma
+#pragma warning(push, 0)
 #endif
 
 #include <stdint.h>
@@ -95,7 +97,7 @@ namespace lml {
 
     template<typename T>
     concept is_scalar_type = requires(T v) {
-        {(double)v};
+        {static_cast<double>(v)};
     };
 
     template<typename T>
@@ -381,14 +383,14 @@ namespace lml {
         }
 
         template<is_scalar_type ScalarType, typename... Args>
-        LML_QUALIFIER Vec(ScalarType x, Args... args) {
+        LML_QUALIFIER Vec(ScalarType _x, Args... args) {
             if constexpr (sizeof...(Args) == 0 && is_scalar_type<T>) {
-                for (int i = 0; i < N; ++i) data[i] = x;
+                for (int i = 0; i < N; ++i) data[i] = _x;
             }
             else {
                 static_assert(get_dim_v<T> + (0 + ... + get_dim_v<Args>) >= N, "Vector not initialized with enough components.");
                 int pos = 0;
-                copyVec(*this, pos, x);
+                copyVec(*this, pos, _x);
                 (..., copyVec(*this, pos, args));
             }
         }
@@ -923,7 +925,7 @@ namespace lml {
         using value_type = T;
 
         LML_QUALIFIER Quat() : x(0), y(0), z(0), w(1) {}
-        LML_QUALIFIER Quat(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
+        LML_QUALIFIER Quat(T _x, T _y, T _z, T _w) : x(_x), y(_y), z(_z), w(_w) {}
         LML_QUALIFIER Quat(Vec<T, 3> euler) {
             T cx = cos(euler.x * static_cast<T>(0.5));
             T sx = sin(euler.x * static_cast<T>(0.5));
@@ -1631,8 +1633,10 @@ namespace lml {
     using dquat = Quat<double>;
 }
 
-#ifdef __clang__
+#if defined(__clang__)
 #pragma clang diagnostic pop
+#elif defined(__GNUC__) || defined(__GNUG__)
+#pragma GCC diagnostic pop
 #elif defined(_MSC_VER)
 #pragma warning(pop)
 #endif
